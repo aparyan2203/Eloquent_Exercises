@@ -21,5 +21,3 @@ function withBoxUnlocked(val) {
       if (lock_check) box.lock();
     }
 }
-
-//Q3
