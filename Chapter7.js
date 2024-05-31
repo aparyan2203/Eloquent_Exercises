@@ -1,4 +1,5 @@
 //Q1
+//compare avg steps for doing a task for both robots
 function helper(state, robot, memory) {
     let steps = 0;
     while (state.parcels.length != 0) {
@@ -24,6 +25,7 @@ function helper(state, robot, memory) {
   }
 
 //Q2
+//robot efficiency
 function yourRobot({place, parcels}, route) {
   if (route.length === 0) {
     let routes = parcels.map(parcel => 
@@ -40,6 +42,8 @@ function yourRobot({place, parcels}, route) {
 }
 
 //Q3
+// Write a new class PGroup, similar to the Group class from Chapter 6, which stores a set of values. Like Group, it has add, delete, and has methods. Its add method, however, returns a new PGroup instance with the given member added and leaves the old one unchanged. Similarly, delete creates a new instance without a given member.
+// The class should work for values of any type, not just strings. It does not have to be eﬀicient when used with large numbers of values.
 class PGroup {
   x;
   constructor(x) {

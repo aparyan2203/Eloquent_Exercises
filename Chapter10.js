@@ -1,4 +1,5 @@
 //Q2
+// Write an ES module based on the example from Chapter 7 that contains the array of roads and exports the graph data structure representing them as roadGraph. It depends on a module ./graph.js that exports a function buildGraph, used to build the graph. This function expects an array of two- element arrays (the start and end points of the roads).
 import {Graph} from "./graph";
 
 const roads = [
@@ -13,4 +14,4 @@ const roads = [
 
 const roadsGraph = Graph(roads.map(r => r.split("-")));
 
-module.export = roadsGraph;
+module.exports = roadsGraph;
