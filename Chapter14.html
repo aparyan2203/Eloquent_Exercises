@@ -1,0 +1,85 @@
+<!-- Q1 -->
+<!-- For each row, the <table> tag contains a <tr> tag. Inside of these <tr> tags, we can put cell elements: either heading cells (<th>) or regular cells (<td>).
+  Given a dataset of mountains, an array of objects with name, height, and place properties, generate the DOM structure for a table that enumerates the objects. It has one column per key and one row per object, plus a header row with <th> elements at the top, listing the column names.
+  Write this so that the columns are automatically derived from the objects, by taking the property names of the first object in the data.
+  Show the resulting table in the document by appending it to the element that has an id attribute of "mountains".
+  Once you have this working, right-align cells that contain number values by setting their style.textAlign property to "right". -->
+<!doctype html>
+
+<meta charset="utf8">
+
+<h1>Mountains</h1>
+
+<div id="mountains"></div>
+
+<script>
+  const MOUNTAINS = [
+    {name: "Kilimanjaro", height: 5895, place: "Tanzania"},
+    {name: "Everest", height: 8848, place: "Nepal"},
+    {name: "Mount Fuji", height: 3776, place: "Japan"},
+    {name: "Vaalserberg", height: 323, place: "Netherlands"},
+    {name: "Denali", height: 6168, place: "United States"},
+    {name: "Popocatepetl", height: 5465, place: "Mexico"},
+    {name: "Mont Blanc", height: 4808, place: "Italy/France"}
+  ];
+
+  //my code
+  function buildTable(data) {
+    let table = document.createElement("table");
+  
+    let fields = Object.keys(data[0]);
+    let Row = document.createElement("tr");
+    fields.forEach(function(field) {
+      let headCell = document.createElement("th");
+      headCell.appendChild(document.createTextNode(field));
+      Row.appendChild(headCell);
+    });
+    table.appendChild(Row);
+
+    data.forEach(function(object) {
+      let row = document.createElement("tr");
+      fields.forEach(function(field) {
+        let cell = document.createElement("td");
+        cell.appendChild(document.createTextNode(object[field]));
+        if (typeof object[field] == "number") {
+          cell.style.textAlign = "right";
+        }
+        row.appendChild(cell);
+      });
+      table.appendChild(row);
+    });
+
+    return table;
+  }
+
+  document.querySelector("#mountains")
+    .appendChild(buildTable(MOUNTAINS));
+</script>
+
+<!-- Q2
+The document.getElementsByTagName method returns all child elements with a given tag name. Implement your own version of this as a function that takes a node and a string (the tag name) as arguments and returns an array containing all descendant element nodes with the given tag name. Your function should go through the document itself. It may not use a method like querySelectorAll to do the work.
+To find the tag name of an element, use its nodeName property. But note that this will return the tag name in all uppercase. Use the toLowerCase or toUpperCase string methods to compensate for this. -->
+<!doctype html>
+
+<h1>Heading with a <span>span</span> element.</h1>
+<p>A paragraph with <span>one</span>, <span>two</span>
+  spans.</p>
+
+<script>
+  function byTagName(node, tagName) {
+    let arr = [];
+    function helper(node) {
+      let n = node.childNodes.length;
+      for (let i = 0; i < n; i++) {
+        let child = node.childNodes[i];
+        if (child.nodeType == document.ELEMENT_NODE) {
+          if (child.nodeName.toLowercase() == tagName) arr.push(child);
+          helper(child);
+        }
+      }
+    }
+
+    helper(node);
+    return arr;
+  }
+</script>
