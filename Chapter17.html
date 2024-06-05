@@ -1,0 +1,149 @@
+<!-- Q1
+Write a program that draws the following shapes on a canvas:
+1. A trapezoid (a rectangle that is wider on one side)
+2. A red diamond (a rectangle rotated 45 degrees or 1⁄4π radians) 3. A zigzagging line
+4. A spiral made up of 100 straight line segments
+5. A yellow star -->
+<!doctype html>
+<script src="code/chapter/16_game.js"></script>
+<script src="code/levels.js"></script>
+<script src="code/_stop_keys.js"></script>
+<script src="code/chapter/17_canvas.js"></script>
+
+<canvas width="600" height="200"></canvas>
+<script>
+  let cx = document.querySelector("canvas").getContext("2d");
+
+  function makeTrapezoid(x, y) {
+    cx.beginPath();
+    cx.moveTo(x, y);
+    cx.lineTo(x + 50, y);
+    cx.lineTo(x + 70, y + 50);
+    cx.lineTo(x - 20, y + 50);
+    cx.closePath();
+    cx.stroke();
+  }
+  trapezoid(30, 30);
+
+  function makeDiamond(x, y) {
+    cx.translate(x + 30, y + 30);
+    cx.rotate(Math.PI / 4);
+    cx.fillStyle = "red";
+    cx.fillRect(-30, -30, 60, 60);
+    cx.resetTransform();
+  }
+  diamond(140, 30);
+
+  function makeZigzag(x, y) {
+    cx.beginPath();
+    cx.moveTo(x, y);
+    for (let i = 0; i < 8; i++) {
+      cx.lineTo(x + 80, y + i * 8 + 4);
+      cx.lineTo(x, y + i * 8 + 8);
+    }
+    cx.stroke();
+  }
+  zigzag(240, 20);
+
+  function makeSpiral(x, y) {
+    let radius = 50, xCenter = x + radius, yCenter = y + radius;
+    cx.beginPath();
+    cx.moveTo(xCenter, yCenter);
+    for (let i = 0; i < 300; i++) {
+      let angle = i * Math.PI / 30;
+      let dist = radius * i / 300;
+      cx.lineTo(xCenter + Math.cos(angle) * dist,
+                yCenter + Math.sin(angle) * dist);
+    }
+    cx.stroke();
+  }
+  spiral(340, 20);
+
+  function makeStar(x, y) {
+    let radius = 50, xCenter = x + radius, yCenter = y + radius;
+    cx.beginPath();
+    cx.moveTo(xCenter + radius, yCenter);
+    for (let i = 1; i <= 8; i++) {
+      let angle = i * Math.PI / 4;
+      cx.quadraticCurveTo(xCenter, yCenter,
+                          xCenter + Math.cos(angle) * radius,
+                          yCenter + Math.sin(angle) * radius);
+    }
+    cx.fillStyle = "gold";
+    cx.fill();
+  }
+  star(440, 20);
+</script>
+
+<!-- Q2
+Earlier in the chapter, we saw an example program that drew a pie chart. Modify this program so that the name of each category is shown next to the slice that represents it. Try to find a pleasing-looking way to automatically
+position this text that would work for other datasets as well. You may assume that categories are big enough to leave enough room for their labels. -->
+<!doctype html>
+<script src="code/chapter/16_game.js"></script>
+<script src="code/levels.js"></script>
+<script src="code/_stop_keys.js"></script>
+<script src="code/chapter/17_canvas.js"></script>
+
+<canvas width="600" height="300"></canvas>
+<script>
+  let cx = document.querySelector("canvas").getContext("2d");
+  let total = results
+    .reduce((sum, {count}) => sum + count, 0);
+  let currentAngle = -0.5 * Math.PI;
+  let centerX = 300, centerY = 150;
+
+  // Add code to draw the slice labels in this loop.
+  for (let result of results) {
+    let sliceAngle = (result.count / total) * 2 * Math.PI;
+    cx.beginPath();
+    cx.arc(centerX, centerY, 100,
+           currentAngle, currentAngle + sliceAngle);
+    currentAngle += sliceAngle;
+    cx.lineTo(centerX, centerY);
+    cx.fillStyle = result.color;
+    cx.fill();
+  }
+</script>
+
+<!-- Q3
+Draw a box with bouncing ball on it. Use the requestAnimationFrame technique -->
+<!doctype html>
+<script src="code/chapter/16_game.js"></script>
+<script src="code/levels.js"></script>
+<script src="code/_stop_keys.js"></script>
+<script src="code/chapter/17_canvas.js"></script>
+
+<canvas width="400" height="400"></canvas>
+<script>
+  let cx = document.querySelector("canvas").getContext("2d");
+
+  let lastTime = null;
+  function frame(time) {
+    if (lastTime != null) {
+      updateAnimation(Math.min(100, time - lastTime) / 1000);
+    }
+    lastTime = time;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  let x = 100, y = 300;
+  let radius = 10;
+  let speedX = 100, speedY = 60;
+
+  function updateAnimation(step) {
+    cx.clearRect(0, 0, 400, 400);
+    cx.strokeStyle = "blue";
+    cx.lineWidth = 4;
+    cx.strokeRect(25, 25, 350, 350);
+    
+    x += step * speedX;
+    y += step * speedY;
+    if (x < 25 + radius || x > 375 - radius) speedX = -speedX;
+    if (y < 25 + radius || y > 375 - radius) speedY = -speedY;
+    cx.fillStyle = "red";
+    cx.beginPath();
+    cx.arc(x, y, radius, 0, 7);
+    cx.fill();
+  }
+</script>
